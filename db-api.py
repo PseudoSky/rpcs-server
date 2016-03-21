@@ -38,7 +38,15 @@ def delete_user_byID(user_id):
         User[user_id].delete()
         return "User deleted"
     except:
-        return "404 Error"
+        return "No user found with that ID"
+
+@app.route('/api/user/delete/all')
+def delete_all_users():
+    try:
+        delete(u for u in User)
+        return "All users deleted"
+    except:
+        return "No users found"
 
 if __name__ == '__main__':
     app.wsgi_app = orm.db_session(app.wsgi_app)
