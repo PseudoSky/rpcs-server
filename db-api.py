@@ -40,6 +40,7 @@ def delete_user_byID(user_id):
     except:
         return "No user found with that ID"
 
+#delete all users
 @app.route('/api/user/delete/all')
 def delete_all_users():
     try:
