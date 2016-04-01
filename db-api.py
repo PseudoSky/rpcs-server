@@ -6,8 +6,6 @@ from pony import orm
 
 from flask_restful import reqparse,abort
 
-
-
 class Settings:
     DB_PROVIDER = "sqlite"
     DB_NAME = "inventory.db"
