@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from decimal import Decimal
 from pony.orm import *
@@ -11,12 +12,12 @@ class Sensor(db.Entity):
 class Value(db.Entity):
     sensor = Required(Sensor)
     user = Required("User")
-    time = Required(datetime)
-    value = Optional(Decimal)
+    time = Required(datetime, sql_default='CURRENT_TIMESTAMP')
+    value = Optional(float)
     PrimaryKey(sensor, user, time)
 
 class User(db.Entity):
-    id = PrimaryKey(int)
+    id = PrimaryKey(uuid.UUID, default=uuid.uuid4)
     first = Required(str)
     last = Required(str)
     phone = Optional(str)
@@ -76,3 +77,4 @@ class Form(db.Entity):
 
 sql_debug(True)
 db.generate_mapping(create_tables=True)
+
