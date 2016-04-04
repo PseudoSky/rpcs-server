@@ -82,7 +82,14 @@ def get_sensor_ByName(sensor_name):
     try:
         s = Sensor.get(name=sensor_name)
         # consider converting into a list
-        return jsonify(Values=s.values)   # returning a set of values
+        if(s is None):
+            return "No such sensor exists."
+            
+        L = list(s.values.copy())
+        for i in xrange(len(L)):
+            L[i] = L[i].to_dict()
+
+        return jsonify(Values=L)   # returning a set of values
     except:
         return "404 Error"
 
@@ -106,6 +113,7 @@ def update_sensor_ByName():
         s = Sensor.get(name=sensor_name)
         if(s is None):
             s = Sensor(name=sensor_name)
+        print "BEFORE", s.values.is_empty()
 
         v = Value(sensor=s, user=u, time=datetime.datetime.now())
 
