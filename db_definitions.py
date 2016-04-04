@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 from decimal import Decimal
 from pony.orm import *
@@ -17,7 +16,7 @@ class Value(db.Entity):
     PrimaryKey(sensor, user, time)
 
 class User(db.Entity):
-    id = PrimaryKey(uuid.UUID, default=uuid.uuid4)
+    id = PrimaryKey(int)
     first = Required(str)
     last = Required(str)
     phone = Optional(str)
