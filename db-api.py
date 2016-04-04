@@ -40,7 +40,7 @@ def get_user_byID(user_id):
 
 #retrieve a user
 @app.route('/api/user', methods=['GET'])
-def get_users():    
+def get_users(user_id):    
     try:
         return jsonify({'first': User[user_id].first,
                 'last' : User[user_id].last,
