@@ -4,7 +4,7 @@ from db_definitions import *
 from decimal import Decimal
 import flask.ext.restful as rest
 from pony import orm
-import datetime
+import datetime, sys
 
 from flask_restful import reqparse,abort
 
@@ -84,13 +84,14 @@ def get_sensor_ByName(sensor_name):
         # consider converting into a list
         if(s is None):
             return "No such sensor exists."
-            
+
         L = list(s.values.copy())
         for i in xrange(len(L)):
             L[i] = L[i].to_dict()
 
         return jsonify(Values=L)   # returning a set of values
     except:
+        print sys.exc_info()[0]
         return "404 Error"
 
 @app.route('/api/sensor', methods=['POST'])
@@ -111,17 +112,28 @@ def update_sensor_ByName():
             return "User with this ID does not exist\n"
 
         s = Sensor.get(name=sensor_name)
+
+        # Adding sensor if it isn't present
         if(s is None):
             s = Sensor(name=sensor_name)
-        print "BEFORE", s.values.is_empty()
 
-        v = Value(sensor=s, user=u, time=datetime.datetime.now())
+        v = Value(sensor=s, user=u, time=datetime.datetime.now(), value=val)
+        print "TYPES", type(val), type(Decimal(val)), type(v.value)
 
         return jsonify(sensor_name=sensor_name,
-                       value_Added = v.to_dict())
+                       value_Added = v.to_dict(),
+                       UserName = u.first+u.last)
     except:
+        print sys.exc_info()[0] # getting a type error here
         return "404 Error"
 
+@app.route('/api/sensor/drop', methods=['GET'])
+def delete_all_sensors():
+    try:
+        delete(s for s in Sensor)
+        return "All sensors deleted"
+    except:
+        return "No sensors found"
 
 if __name__ == '__main__':
     app.wsgi_app = orm.db_session(app.wsgi_app)

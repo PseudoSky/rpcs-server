@@ -11,8 +11,8 @@ class Sensor(db.Entity):
 class Value(db.Entity):
     sensor = Required(Sensor)
     user = Required("User")
-    time = Required(datetime)
-    value = Optional(Decimal)
+    time = Required(datetime, sql_default='CURRENT_TIMESTAMP')
+    value = Optional(float)
     PrimaryKey(sensor, user, time)
 
 class User(db.Entity):
