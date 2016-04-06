@@ -13,7 +13,7 @@ Address - 1234
 You will tpye this into the terminal -
 curl -X POST http://128.2.20.131:5000/api/user -d "first=johnlast=doe&phone=12345&address=1234"
 
-![Alt text](http://i.imgur.com/fPw2b3b.pngg "Post User")
+![Alt text](http://i.imgur.com/kn63zFK.png "Post User")
 
 ###### Retrieving a user by its user id
 Just type this into the terminal -
