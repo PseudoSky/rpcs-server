@@ -17,7 +17,6 @@ app.config.from_object(Settings)
 
 
 def abort_if_null(keys,obj):
-    # print(obj)
     errors=[]
     for key in keys:
         print(key not in obj or obj[key] is None)
@@ -27,7 +26,7 @@ def abort_if_null(keys,obj):
     return errors
 
 
-#retrieve a user
+#retrieve a user by user id
 @app.route('/api/user/<int:user_id>', methods=['GET'])
 def get_user_byID(user_id):    
     try:
@@ -38,14 +37,15 @@ def get_user_byID(user_id):
     except:
         return "404 Error"
 
-#retrieve a user
+
+#retrieve all users
 @app.route('/api/user', methods=['GET'])
 def get_users():    
     try:
-        return jsonify({'first': User[user_id].first,
-                'last' : User[user_id].last,
-                'phone': User[user_id].phone,
-                'address': User[user_id].address})
+        return jsonify({'first': User.first,
+                'last' : User.last,
+                'phone': User.phone,
+                'address': User.address})
     except:
         return "404 Error"
 
@@ -53,7 +53,6 @@ def get_users():
 # curl -X POST http://127.0.0.1:5000/api/user -d "first=sky&last=frank&phone=707&address=1234"
 @app.route('/api/user', methods=['POST'])
 def mk_user():
-    # print(str(request.form))
     parser = reqparse.RequestParser()
     parser.add_argument('first', type=str, help='Rate to charge for this resource')
     parser.add_argument('last', type=str, help='Rate to charge for this resource')
@@ -87,5 +86,5 @@ def delete_all_users():
 
 if __name__ == '__main__':
     app.wsgi_app = orm.db_session(app.wsgi_app)
-    app.run(host='128.2.20.131', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
