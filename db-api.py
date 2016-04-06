@@ -35,7 +35,7 @@ def get_user_byID(user_id):
                 'phone': User[user_id].phone,
                 'address': User[user_id].address})
     except:
-        return "404 Error"
+        return "404 Error\n"
 
 
 #retrieve all users
@@ -47,7 +47,7 @@ def get_users():
                 'phone': User.phone,
                 'address': User.address})
     except:
-        return "404 Error"
+        return "404 Error\n"
 
 
 # curl -X POST http://127.0.0.1:5000/api/user -d "first=sky&last=frank&phone=707&address=1234"
@@ -71,18 +71,18 @@ def mk_user():
 def delete_user_byID(user_id):
     try:
         User[user_id].delete()
-        return "User deleted"
+        return "User deleted\n"
     except:
-        return "No user found with that ID"
+        return "No user found with that ID\n"
 
 #delete all users
 @app.route('/api/user/drop',methods=['GET'])
 def delete_all_users():
     try:
         delete(u for u in User)
-        return "All users deleted"
+        return "All users deleted\n"
     except:
-        return "No users found"
+        return "No users found\n"
 
 if __name__ == '__main__':
     app.wsgi_app = orm.db_session(app.wsgi_app)
