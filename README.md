@@ -25,7 +25,7 @@ curl -X GET http://128.2.20.131:5000/api/user/user_id
 
 Here's how you would retrieve a user with user_id = 17, for example -
 
-![Alt text](http://i.imgur.com/4k8fpsW.png "Post User")
+![Alt text](http://i.imgur.com/4k8fpsW.png "Get User")
 
 
 ###### Deleting a user by its user id
@@ -33,9 +33,9 @@ If you want to delete a user with the user id "user_id", just use the following 
 
 curl -X DELETE http://128.2.20.131:5000/api/user/user_id
 
-Here's how you would delete a user with user_id = 17, for example -
+Here's how you would delete a user with user_id = 16, for example -
 
-![Alt text](http://i.imgur.com/4k8fpsW.png "Post User")
+![Alt text](http://i.imgur.com/EYbuXhz.png "Delete User")
 
 
 
