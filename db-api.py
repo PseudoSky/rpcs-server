@@ -125,7 +125,7 @@ def update_sensor_ByName():
             s = Sensor(name=sensor_name)
 
         print type(s), type(u), type(datetime.now()), type(val)
-        v = Value(sensor=s, user=u, time=datetime.now(), value=val)
+        v = Value(sensor=s, user=u, value=val)
 
         return jsonify(sensor_name=sensor_name,
                        value_Added = v.to_dict(),
