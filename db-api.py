@@ -97,7 +97,6 @@ def get_sensor_ByName(sensor_name, uid):
 
         return jsonify(Values=v)   # returning a set of values
     except:
-        print sys.exc_info()[0]
         return "404 Error"
 
 @app.route('/api/sensor', methods=['POST'])
@@ -124,7 +123,6 @@ def update_sensor_ByName():
             s = Sensor(name=sensor_name)
 
         v = Value(sensor=s, user=u, time=datetime.datetime.now(), value=val)
-        print "TYPES", type(val), type(Decimal(val)), type(v.value)
 
         return jsonify(sensor_name=sensor_name,
                        value_Added = v.to_dict(),
