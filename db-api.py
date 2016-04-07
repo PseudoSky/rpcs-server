@@ -3,6 +3,8 @@ from flask import Flask, jsonify,request
 from db_definitions import *
 import flask.ext.restful as rest
 from pony import orm
+import sys
+from datetime import datetime
 
 from flask_restful import reqparse,abort
 
@@ -116,18 +118,19 @@ def update_sensor_ByName():
         if(u is None):
             return "User with this ID does not exist\n"
 
-        s = Sensor.get(name=sensor_name)
+        s = Sensor.get(name=sensor_name) # need to take user ID into account here
 
         # Adding sensor if it isn't present
         if(s is None):
             s = Sensor(name=sensor_name)
 
-        v = Value(sensor=s, user=u, time=datetime.datetime.now(), value=val)
+        v = Value(sensor=s, user=u, time=datetime.now(), value=val)
 
         return jsonify(sensor_name=sensor_name,
                        value_Added = v.to_dict(),
                        UserName = u.first+" "+u.last)
     except:
+        print sys.exc_info()[0]
         return "404 Error"
 
 @app.route('/api/sensor/drop', methods=['GET'])
