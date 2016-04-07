@@ -124,6 +124,7 @@ def update_sensor_ByName():
         if(s is None):
             s = Sensor(name=sensor_name)
 
+        print type(s), type(u), type(datetime.now(), type(val)
         v = Value(sensor=s, user=u, time=datetime.now(), value=val)
 
         return jsonify(sensor_name=sensor_name,
