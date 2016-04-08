@@ -102,7 +102,7 @@ def get_sensor_ByName(sensor_name, uid):
 
         return jsonify(Values=v)   # returning a set of values
     except:
-        return "404 Error"
+        return "404 Error\n"
 
 # CURL REQUEST ON YOUR LOCAL COMPUTER: curl -X POST http://127.0.0.1:5000/api/sensor -d "sensor_name=sensor1&uid=5&decimal_val=18.3"
 # CURL REQUEST WHEN RUNNING ON ID8: curl -X POST http://128.2.20.131:5000/api/sensor -d "sensor_name=sensor1&uid=5&decimal_val=18.3"
@@ -141,17 +141,17 @@ def update_sensor_ByName():
                        UserName = u.first+" "+u.last)
     except:
         print "ERROR ENCOUNTERED IN THE TRY BLOCK:", sys.exc_info()[0]
-        return "404 Error"
+        return "404 Error\n"
 
 @app.route('/api/sensor/drop', methods=['GET'])
 def delete_all_sensors():
     try:
         delete(s for s in Sensor)
-        return "All sensors deleted"
+        return "All sensors deleted\n"
     except:
-        return "No sensors found"
+        return "No sensors found\n"
 
 if __name__ == '__main__':
     app.wsgi_app = orm.db_session(app.wsgi_app)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='128.2.20.131', port=5000, debug=True)
 
