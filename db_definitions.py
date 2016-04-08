@@ -16,7 +16,7 @@ class Value(db.Entity):
     PrimaryKey(sensor, user, time)
 
 class User(db.Entity):
-    id = PrimaryKey(int)
+    id = PrimaryKey(int, auto=True)
     first = Required(str)
     last = Required(str)
     phone = Optional(str)
