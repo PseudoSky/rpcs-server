@@ -86,13 +86,16 @@ def delete_all_users():
     except:
         return "No users found\n"
 
+# ON YOUR LOCAL PC, you can just got to localhost:5000/api/sensor/<sensor_name>/<uid> and take a look at the values
+# ON THE ID8 MACHINE USE THE CURL REQUEST BELOW:
+# curl -X GET http://128.2.20.131:5000/api/user/<valid_user_id>
 @app.route('/api/sensor/<sensor_name>/<int:uid>', methods=['GET'])
 def get_sensor_ByName(sensor_name, uid):
     # Need to get values from sensor and return it
     try:
         v = list(Value.select(lambda p: p.sensor.name==sensor_name and p.user.id==uid))
         if(len(v) == 0):
-            return "No such sensor for this user exists"
+            return "No such sensor for this user exists\n"
 
         for i in xrange(len(v)):
             v[i] = v[i].to_dict()
@@ -100,6 +103,12 @@ def get_sensor_ByName(sensor_name, uid):
         return jsonify(Values=v)   # returning a set of values
     except:
         return "404 Error"
+
+# CURL REQUEST ON YOUR LOCAL COMPUTER: curl -X POST http://127.0.0.1:5000/api/sensor -d "sensor_name=sensor1&uid=5&decimal_val=18.3"
+# CURL REQUEST WHEN RUNNING ON ID8: curl -X POST http://128.2.20.131:5000/api/sensor -d "sensor_name=sensor1&uid=5&decimal_val=18.3"
+
+# At times, you may get a "user with this ID does not exist" return value. This means that the user does not exist in database.sqlite.
+# You'll have to create this new user you are trying to add the sensor for and then call this function.
 
 @app.route('/api/sensor', methods=['POST'])
 def update_sensor_ByName():
@@ -124,14 +133,14 @@ def update_sensor_ByName():
         if(s is None):
             s = Sensor(name=sensor_name)
 
-        print type(s), type(u), type(datetime.now()), type(val)
+        print "HERE ARE THE TYPES OF THE VALUES BEING INSERTED INTO THE VALUE ENTITY:", type(s), type(u), type(datetime.now()), type(val)
         v = Value(sensor=s, user=u, time=datetime.now(), value=val)
 
         return jsonify(sensor_name=sensor_name,
                        value_Added = v.to_dict(),
                        UserName = u.first+" "+u.last)
     except:
-        print sys.exc_info()[0]
+        print "ERROR ENCOUNTERED IN THE TRY BLOCK:", sys.exc_info()[0]
         return "404 Error"
 
 @app.route('/api/sensor/drop', methods=['GET'])
