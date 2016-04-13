@@ -134,8 +134,10 @@ def update_sensor_ByName():
             s = Sensor(name=sensor_name)
 
         print "HERE ARE THE TYPES OF THE VALUES BEING INSERTED INTO THE VALUE ENTITY:", type(s), type(u), type(datetime.now()), type(val)
-        v = Value(sensor=s, user=u, time=datetime.now(), value=val)
+        print "HERE ARE THE TYPES OF THE VALUES BEING INSERTED INTO THE VALUE ENTITY:", s, u, datetime.now(), val
 
+        v = Value(sensor=s, user=u, time=datetime.now(), value=val)
+        print "TYPES OF VALUE", type(v.sensor), type(v.user), type(v.time), type(v.value)
         return jsonify(sensor_name=sensor_name,
                        value_Added = v.to_dict(),
                        UserName = u.first+" "+u.last)
@@ -153,5 +155,5 @@ def delete_all_sensors():
 
 if __name__ == '__main__':
     app.wsgi_app = orm.db_session(app.wsgi_app)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='128.2.20.131', port=5000, debug=True)
 
