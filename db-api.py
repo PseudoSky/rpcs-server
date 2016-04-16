@@ -1,10 +1,11 @@
 #!flask/bin/python
-from flask import Flask, jsonify,request
+from flask import Flask, jsonify,request, Response, make_response
 from db_definitions import *
 import flask.ext.restful as rest
 from pony import orm
 import sys
 from datetime import datetime
+import json
 
 from flask_restful import reqparse,abort
 
@@ -86,9 +87,8 @@ def delete_all_users():
     except:
         return "No users found\n"
 
-# ON YOUR LOCAL PC, you can just got to localhost:5000/api/sensor/<sensor_name>/<uid> and take a look at the values
 # ON THE ID8 MACHINE USE THE CURL REQUEST BELOW:
-# curl -X GET http://128.2.20.131:5000/api/user/<valid_user_id>
+# curl -X GET http://128.2.20.131:5000/api/user/<sensor_name>/<user_id>
 @app.route('/api/sensor/<sensor_name>/<int:uid>', methods=['GET'])
 def get_sensor_ByName(sensor_name, uid):
     # Need to get values from sensor and return it
@@ -96,15 +96,16 @@ def get_sensor_ByName(sensor_name, uid):
         v = list(Value.select(lambda p: p.sensor.name==sensor_name and p.user.id==uid))
         if(len(v) == 0):
             return "No such sensor for this user exists\n"
-
+	
         for i in xrange(len(v)):
             v[i] = v[i].to_dict()
+	    v[i]['time'] = str(v[i]['time'])
 
-        return jsonify(Values=v)   # returning a set of values
+	return jsonify(Values=v)
     except:
+        print "ERROR ENCOUNTERED IN THE TRY BLOCK:", sys.exc_info()[0]
         return "404 Error\n"
 
-# CURL REQUEST ON YOUR LOCAL COMPUTER: curl -X POST http://127.0.0.1:5000/api/sensor -d "sensor_name=sensor1&uid=5&decimal_val=18.3"
 # CURL REQUEST WHEN RUNNING ON ID8: curl -X POST http://128.2.20.131:5000/api/sensor -d "sensor_name=sensor1&uid=5&decimal_val=18.3"
 
 # At times, you may get a "user with this ID does not exist" return value. This means that the user does not exist in database.sqlite.
@@ -133,13 +134,9 @@ def update_sensor_ByName():
         if(s is None):
             s = Sensor(name=sensor_name)
 
-        print "HERE ARE THE TYPES OF THE VALUES BEING INSERTED INTO THE VALUE ENTITY:", type(s), type(u), type(datetime.now()), type(val)
-        print "HERE ARE THE TYPES OF THE VALUES BEING INSERTED INTO THE VALUE ENTITY:", s, u, datetime.now(), val
-
         v = Value(sensor=s, user=u, time=datetime.now(), value=val)
-        print "TYPES OF VALUE", type(v.sensor), type(v.user), type(v.time), type(v.value)
+        
         return jsonify(sensor_name=sensor_name,
-                       value_Added = v.to_dict(),
                        UserName = u.first+" "+u.last)
     except:
         print "ERROR ENCOUNTERED IN THE TRY BLOCK:", sys.exc_info()[0]
@@ -149,6 +146,7 @@ def update_sensor_ByName():
 def delete_all_sensors():
     try:
         delete(s for s in Sensor)
+
         return "All sensors deleted\n"
     except:
         return "No sensors found\n"
